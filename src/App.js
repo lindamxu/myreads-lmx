@@ -32,6 +32,9 @@ class BooksApp extends React.Component {
     if (query) {
       BooksAPI.search(query.trim(), 20).then((books => {
         if (books.length > 0 ) {
+          books.forEach(function(book) {
+          book.shelf="none";
+          })
           this.setState({ newBooks: books })
         }
         else {
@@ -39,14 +42,6 @@ class BooksApp extends React.Component {
         }
       }))
     }else this.setState({ newBooks: [] })
-
-  }
-  addNewBook = (newBook, shelf) => {
-    newBook.shelf = shelf;
-    this.setState({
-      books: this.state.books.concat(newBook)
-    })
-
   }
 
   render() {
@@ -65,7 +60,7 @@ class BooksApp extends React.Component {
                 searchBooks={this.searchBooks}
                 query={this.query}
                 newBooks={this.state.newBooks}
-                addNewBook={this.addNewBook}
+                addNewBook={this.handleShelfChange}
                 />
             )}
           />

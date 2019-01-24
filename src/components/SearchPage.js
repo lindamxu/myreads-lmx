@@ -40,10 +40,23 @@ class SearchPage extends Component {
             {newBooks.map((book,i) => {
               if (!(book.hasOwnProperty('authors'))) {
                 return <SearchItem
-                  key={i}
+                  key={book.id}
                   book={book}
+                  shelf={book.shelf}
                   title={book.title}
                   author={'None Found'}
+                  description={book.description}
+                  addNewBook={addNewBook}
+                  />
+              }
+              else if (!(book.hasOwnProperty('imageLinks'))){
+                return <SearchItem
+                  book={book}
+                  key={book.id}
+                  shelf={book.shelf}
+                  title={book.title}
+                  imageLink=''
+                  author={book.authors[0]}
                   description={book.description}
                   addNewBook={addNewBook}
                   />
@@ -51,7 +64,8 @@ class SearchPage extends Component {
               else {
                 return <SearchItem
                   book={book}
-                  key={i}
+                  key={book.id}
+                  shelf={book.shelf}
                   title={book.title}
                   imageLink={book.imageLinks.thumbnail}
                   author={book.authors[0]}

@@ -7,7 +7,7 @@ class SearchItem extends Component {
     this.props.addNewBook(this.props.book, event.target.value);
   }
   render() {
-    const { title, author, description, imageLink } = this.props;
+    const { title, author, description, imageLink, shelf } = this.props;
     return (
       <li className="search-item">
         <div className="search-item-container">
@@ -17,7 +17,7 @@ class SearchItem extends Component {
               <h2 className="search-book-title">{title}</h2>
               <div className="add-search-item">
                   <button type="button">
-                    <select defaultValue="none" onChange={this.addBookToShelf}>
+                    <select value={shelf} onChange={this.addBookToShelf}>
                       <option value="move" disabled>Move to...</option>
                       <option value="currentlyReading">Currently Reading</option>
                       <option value="wantToRead">Want to Read</option>
