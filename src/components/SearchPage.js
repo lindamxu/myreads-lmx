@@ -3,15 +3,18 @@ import { Link } from 'react-router-dom';
 import SearchItem from './SearchItem.js';
 
 class SearchPage extends Component {
+  state = {
+    query: '',
+    newBooks: []
+  }
 
-  getBooks = (event) => {
-    const query = event.target.value;
+  getBooks = (query) => {
     this.setState({ query });
     this.props.searchBooks(query);
   }
 
   render() {
-    const { newBooks, addNewBook } = this.props;
+    const { newBooks, addNewBook, booksOnShelf } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -30,7 +33,8 @@ class SearchPage extends Component {
             <input
               type="text"
               placeholder="Search by title or author"
-              onChange={this.getBooks}
+              value={this.state.query}
+              onChange={event => this.getBooks(event.target.value)}
             />
 
           </div>
@@ -38,44 +42,24 @@ class SearchPage extends Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {newBooks.map((book,i) => {
-              if (!(book.hasOwnProperty('authors'))) {
-                return <SearchItem
-                  key={book.id}
-                  book={book}
-                  shelf={book.shelf}
-                  title={book.title}
-                  author={'None Found'}
-                  description={book.description}
-                  addNewBook={addNewBook}
-                  />
-              }
-              else if (!(book.hasOwnProperty('imageLinks'))){
-                return <SearchItem
-                  book={book}
-                  key={book.id}
-                  shelf={book.shelf}
-                  title={book.title}
-                  imageLink=''
-                  author={book.authors[0]}
-                  description={book.description}
-                  addNewBook={addNewBook}
-                  />
-              }
-              else {
-                return <SearchItem
-                  book={book}
-                  key={book.id}
-                  shelf={book.shelf}
-                  title={book.title}
-                  imageLink={book.imageLinks.thumbnail}
-                  author={book.authors[0]}
-                  description={book.description}
-                  addNewBook={addNewBook}
-                  />
-              }
-            }
-            )}
+              booksOnShelf.forEach(bookOnShelf => {
+                if (book.id === bookOnShelf.id) {
+                  book.shelf = bookOnShelf.shelf;
+                }
+              })
 
+              return <SearchItem
+                book={book}
+                  key={book.id}
+                  shelf={book.shelf ? book.shelf: 'none'}
+                  title={book.title}
+                  imageLink={book.imageLinks ? book.imageLinks.thumbnail : ' '}
+                  author={book.authors ? book.authors : 'no Author '}
+                  description={book.description}
+                  addNewBook={addNewBook}
+                  />
+              })
+            }
           </ol>
         </div>
       </div>
