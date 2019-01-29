@@ -13,7 +13,7 @@ class SearchPage extends Component {
     this.setState({ query });
     if (query) {
       BooksAPI.search(query.trim(), 20).then((books => {
-        if (books.length > 0 ) {
+        if (books.length > 0 && this.state.query === query) {
           this.setState({ newBooks: books })
         }
         else {

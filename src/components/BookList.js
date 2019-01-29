@@ -14,7 +14,6 @@ class BookList extends Component {
     handleShelfChange: PropTypes.func.isRequired
   }
   render() {
-    console.log(this.state.newBooks);
     const { booksOnShelf, handleShelfChange } = this.props;
     return (
       <div className="list-books">
