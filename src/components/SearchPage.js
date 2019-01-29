@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import * as BooksAPI from '../BooksAPI.js';
 import SearchItem from './SearchItem.js';
 
 class SearchPage extends Component {
@@ -8,13 +9,29 @@ class SearchPage extends Component {
     newBooks: []
   }
 
-  getBooks = (query) => {
+  searchBooks = (query) => {
     this.setState({ query });
-    this.props.searchBooks(query);
+    if (query) {
+      BooksAPI.search(query.trim(), 20).then((books => {
+        if (books.length > 0 ) {
+          this.setState({ newBooks: books })
+        }
+        else {
+          this.setState({ newBooks: [] })
+        }
+      }))
+    }else this.setState({ newBooks: [] })
+  }
+
+  componentDidMount() {
+    this.setState({
+      query: '',
+      newBooks: []
+    })
   }
 
   render() {
-    const { newBooks, addNewBook, booksOnShelf } = this.props;
+    const { addNewBook, booksOnShelf } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -34,14 +51,14 @@ class SearchPage extends Component {
               type="text"
               placeholder="Search by title or author"
               value={this.state.query}
-              onChange={event => this.getBooks(event.target.value)}
+              onChange={event => this.searchBooks(event.target.value)}
             />
 
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {newBooks.map((book,i) => {
+            {this.state.newBooks.map((book,i) => {
               booksOnShelf.forEach(bookOnShelf => {
                 if (book.id === bookOnShelf.id) {
                   book.shelf = bookOnShelf.shelf;

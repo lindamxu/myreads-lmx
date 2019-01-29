@@ -29,20 +29,6 @@ class BooksApp extends Component {
       }))
     }))
   }
-  searchBooks = (query) => {
-    this.setState({ query });
-    if (query) {
-      BooksAPI.search(query.trim(), 20).then((books => {
-        if (books.length > 0 ) {
-          this.setState({ newBooks: books })
-        }
-        else {
-          this.setState({ newBooks: [] })
-        }
-      }))
-    }else this.setState({ newBooks: [] })
-  }
-
   render() {
     return (
       <div className="app">
@@ -50,13 +36,14 @@ class BooksApp extends Component {
           <Route exact path="/" render={() => (
               <BookList
                 booksOnShelf={this.state.books}
-                handleShelfChange={this.handleShelfChange}/>
+                handleShelfChange={this.handleShelfChange}
+                newBooks={this.state.newBooks}
+                />
             )}
           />
           <Route
             path="/search" render={() => (
               <SearchPage
-                searchBooks={this.searchBooks}
                 booksOnShelf={this.state.books}
                 newBooks={this.state.newBooks}
                 addNewBook={this.handleShelfChange}

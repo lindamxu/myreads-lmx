@@ -4,12 +4,17 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 class BookList extends Component {
+  state = {
+    query: '',
+    newBooks: []
+  }
+
   static propTypes = {
     booksOnShelf: PropTypes.array.isRequired,
     handleShelfChange: PropTypes.func.isRequired
   }
-
   render() {
+    console.log(this.state.newBooks);
     const { booksOnShelf, handleShelfChange } = this.props;
     return (
       <div className="list-books">
@@ -37,7 +42,7 @@ class BookList extends Component {
             />
         </div>
         <div className="open-search">
-          <Link to="search">
+          <Link to="search" params={{ newBooks: this.state.newBooks }}>
             <button type="button" />
           </Link>
         </div>
